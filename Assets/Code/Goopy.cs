@@ -57,8 +57,6 @@ public class Goopy : MonoBehaviour
 			{
 				anim.transform.localScale = new Vector3(Mathf.Sign(velocity.x), 1, 1);
 			}
-			Debug.DrawRay(transform.position, transform.up, Color.red);
-
 		}
 		else
         {

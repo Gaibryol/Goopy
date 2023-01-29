@@ -25,7 +25,6 @@ public class CompositeBehavior : FlockBehavior
         for (int i = 0; i < behaviors.Length; i++)
         {
             Vector2 partialMove = behaviors[i].CalculateMove(agent, context, flock) * weights[i];
-            Debug.Log("beh: " + behaviors[i].name + " " + partialMove);
             if (partialMove != Vector2.zero)
             {
                 if (partialMove.sqrMagnitude > weights[i] * weights[i])
