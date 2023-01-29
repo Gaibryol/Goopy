@@ -46,8 +46,8 @@ public class CursorController : MonoBehaviour
 		cursorColl.radius += radiusIncrement;
 	}
 
-	private void Start()
-	{
+    private void Awake()
+    {
 		if (CursorController.Instance == null)
 		{
 			Instance = this;
@@ -56,8 +56,11 @@ public class CursorController : MonoBehaviour
 		{
 			Destroy(this.gameObject);
 		}
-
 		cursorColl = cursor.GetComponent<CircleCollider2D>();
+	}
+
+    private void Start()
+	{
 
 		hoverGoopies = new List<Goopy>();
 	}

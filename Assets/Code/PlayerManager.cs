@@ -10,6 +10,7 @@ public class PlayerManager : MonoBehaviour
 	private int numGoopies;
 
 	public FlockBehavior behavior;
+	public Upgrade[] upgrades;
 
 	[Range(10, 500)]
 	public int startingCount = 250;
@@ -47,6 +48,7 @@ public class PlayerManager : MonoBehaviour
 		squareMaxSpeed = maxSpeed * maxSpeed;
 		squareNeighbourRadius = neighbourRadius * neighbourRadius;
 		squareAvoidanceRadius = squareNeighbourRadius * avoidanceRadiusMultiplier * avoidanceRadiusMultiplier;
+		InitUpgrades();
 	}
 
     private void Update()
@@ -88,6 +90,17 @@ public class PlayerManager : MonoBehaviour
 		}
 	}
 
+	public List<Goopy> GetRandomNGoopies(int count)
+    {
+		List<Goopy> randomSet = new List<Goopy>();
+		var rnd = new System.Random();
+		for (int i = 0; i < count; i++)
+        {
+			randomSet.Add(Goopies[rnd.Next(0, Goopies.Count)]);
+        }
+		return randomSet;
+    }
+
 	private List<Transform> GetNearbyObjects(Goopy agent)
 	{
 		List<Transform> context = new List<Transform>();
@@ -101,4 +114,12 @@ public class PlayerManager : MonoBehaviour
 		}
 		return context;
 	}
+
+	private void InitUpgrades()
+    {
+		foreach (Upgrade upgrade in upgrades)
+        {
+			StartCoroutine(upgrade.Apply());
+        }
+    }
 }
