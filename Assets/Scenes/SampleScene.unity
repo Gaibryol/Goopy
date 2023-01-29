@@ -303,6 +303,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8626213254282289365, guid: 6431ffb034b854d4488b15c8f35b4788, type: 3}
+      propertyPath: eat
+      value: 
+      objectReference: {fileID: 7400000, guid: 24c65426ffc7a96449bbd50070f928d8, type: 2}
     - target: {fileID: 8626213254282289370, guid: 6431ffb034b854d4488b15c8f35b4788, type: 3}
       propertyPath: m_Name
       value: Goopy

@@ -6,6 +6,7 @@ public class Goopy : MonoBehaviour
 {
 	[SerializeField] private GameObject GoopyPrefab;
 	[SerializeField] private Animator anim;
+	[SerializeField] private AnimationClip eat;
 
 	[SerializeField, Header("Values")] private int maxAge;
 	[SerializeField] private int numSpawn;
@@ -21,6 +22,15 @@ public class Goopy : MonoBehaviour
 	public void Eat(int amount)
 	{
 		Age += amount;
+		anim.SetBool("Eating", true);
+
+		StartCoroutine(EatCoroutine());
+	}
+
+	private IEnumerator EatCoroutine()
+	{
+		yield return new WaitForSeconds(eat.length);
+		anim.SetBool("Eating", false);
 	}
 
 	private void SetDestination()
