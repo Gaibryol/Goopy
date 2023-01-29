@@ -9,18 +9,43 @@ public class Goopy : MonoBehaviour
 
 	[SerializeField, Header("Values")] private int maxAge;
 	[SerializeField] private int numSpawn;
+	[SerializeField] private float moveSpeed;
+	[SerializeField] private float delayToMove;
 
 	public int Age;
+
+	private Vector3 nextMovePosition;
+	private float moveTimer;
+	private Vector3 startPosition;
 
 	public void Eat(int amount)
 	{
 		Age += amount;
 	}
 
+	private void SetDestination()
+    {
+		Vector3 direction = ((Vector3)Random.insideUnitCircle - transform.position).normalized;
+		if (direction.x == 0)
+        {
+			direction.x = direction.y;
+			direction.y = 0;
+        }
+		startPosition = transform.position;
+		nextMovePosition = transform.position + direction;
+		moveTimer = 0;
+	}
+
 	private void HandleMovement()
 	{
+        moveTimer += Time.deltaTime / (1f / moveSpeed);
+        transform.position = Vector3.Lerp(startPosition, nextMovePosition, moveTimer);
 
-	}
+        if (moveTimer > delayToMove + moveSpeed)
+        {
+            SetDestination();
+        }
+    }
 
 	private void HandleAge()
 	{
@@ -73,12 +98,13 @@ public class Goopy : MonoBehaviour
 	private void Start()
 	{
 		Age = 0;
+		startPosition = transform.position;
 	}
 
 	// Update is called once per frame
 	private void Update()
 	{
-		HandleMovement();
+		//HandleMovement();
 		HandleAge();
 		HandleAnimation();
 	}
