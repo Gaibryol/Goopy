@@ -13,12 +13,13 @@ public class Goopy : MonoBehaviour
 	[SerializeField] private float delayToMove;	// how many seconds to wait before being able to move again
 
 	public int Age;
-	public bool isEat;
+	private bool isEat;
 
 	private float moveTimer;
 	private float movePauseTime;    // how many seconds object can move before stopping
 	public Vector2 wanderDirection;
 
+	private Vector2 currentVelocity;	
 	// Used for Flocking algorithm
 	private Collider2D agentCollider;
 	public Collider2D AgentCollider { get { return agentCollider; } }
@@ -47,15 +48,16 @@ public class Goopy : MonoBehaviour
 		moveTimer -= Time.deltaTime;
 		if (moveTimer <= 0)	// Able to move
         {
-			anim.SetBool("Moving", velocity.magnitude > 0.1f);
-
-			transform.up = velocity;
+			// This is used to smooth out the flipping
+			currentVelocity = Vector2.Lerp(currentVelocity, velocity, 0.1f);
+			anim.SetBool("Moving", currentVelocity.magnitude > 0.15f);
+			transform.up = currentVelocity;
 			
-			transform.position += (Vector3)velocity * Time.deltaTime;
+			transform.position += (Vector3)currentVelocity * Time.deltaTime;
 			anim.transform.rotation = Quaternion.Euler(0, 0, transform.rotation.z);
-			if (velocity.x > 0.2f || velocity.x < -0.2f)
+			if (currentVelocity.x > 0.2f || currentVelocity.x < -0.2f)
 			{
-				anim.transform.localScale = new Vector3(Mathf.Sign(velocity.x), 1, 1);
+				anim.transform.localScale = new Vector3(Mathf.Sign(currentVelocity.x), 1, 1);
 			}
 		}
 		else
