@@ -91,13 +91,8 @@ public class Goopy : MonoBehaviour
 			for (int i = 0; i < numSpawn; i++)
 			{
 				// Make sure goopy spawns in the screen
-				Vector3 randPos = new Vector3(Random.Range(-1f, 1f), Random.Range(-1f, 1f), 0);
+				Vector3 randPos = new Vector3(Random.Range(-0.01f, 0.01f), Random.Range(-0.01f, 0.01f), 0);
 				Vector3 spawnPos = transform.position + randPos;
-				while (!ValidSpawnPosition(spawnPos))
-				{
-					randPos = new Vector3(Random.Range(-1f, 1f), Random.Range(-1f, 1f), 0);
-					spawnPos = transform.position + randPos;
-				}
 
 				// Spawn goopy
 				GameObject spawnedGoopy = Instantiate(GoopyPrefab, spawnPos, Quaternion.identity);
@@ -113,21 +108,6 @@ public class Goopy : MonoBehaviour
 	private void HandleAnimation()
 	{
 		anim.SetInteger("Age", Age);
-	}
-
-	private bool ValidSpawnPosition(Vector3 spawnPos)
-	{
-		Vector3 bounds = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, 0));
-		if (spawnPos.x < 0 || spawnPos.y < 0)
-		{
-			return false;
-		}
-		else if (spawnPos.x > bounds.x || spawnPos.y > bounds.y)
-		{
-			return false;
-		}
-
-		return true;
 	}
 
 	// Start is called before the first frame update
