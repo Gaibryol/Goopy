@@ -5,7 +5,9 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Flock/Behavior/Cohesion")]
 public class CohesionBehavior : FlockBehavior
 {
-    public override Vector2 CalculateMove(FlockAgent agent, List<Transform> context, Flock flock)
+    // Cohesion takes in the average position of an objects nearest neighbours and moves towards
+    // that direction
+    public override Vector2 CalculateMove(Goopy agent, List<Transform> context, PlayerManager flock)
     {
         // if no neighbors, return no adjustment
         if (context.Count == 0) return Vector2.zero;

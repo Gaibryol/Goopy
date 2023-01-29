@@ -5,7 +5,9 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Flock/Behavior/Alignment")]
 public class AlignmentBehavior : FlockBehavior
 {
-    public override Vector2 CalculateMove(FlockAgent agent, List<Transform> context, Flock flock)
+    // Alignment takes the average direction each object is facing to align
+    // objects towards the same direction
+    public override Vector2 CalculateMove(Goopy agent, List<Transform> context, PlayerManager flock)
     {
         // if no neighbors, maintain current alignment
         if (context.Count == 0) return agent.transform.up;

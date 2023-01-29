@@ -10,20 +10,26 @@ public class Goopy : MonoBehaviour
 
 	[SerializeField, Header("Values")] private int maxAge;
 	[SerializeField] private int numSpawn;
-	[SerializeField] private float moveSpeed;
-	[SerializeField] private float delayToMove;
+	[SerializeField] private float delayToMove;	// how many seconds to wait before being able to move again
 
 	public int Age;
+	public bool isEat;
 
-	private Vector3 nextMovePosition;
 	private float moveTimer;
-	private Vector3 startPosition;
+	private float movePauseTime;    // how many seconds object can move before stopping
+	public Vector2 wanderDirection;
+
+	// Used for Flocking algorithm
+	private Collider2D agentCollider;
+	public Collider2D AgentCollider { get { return agentCollider; } }
 
 	public void Eat(int amount)
 	{
 		Age += amount;
 		anim.SetBool("Eating", true);
+		anim.SetBool("Moving", false);
 
+		isEat = true;
 		StartCoroutine(EatCoroutine());
 	}
 
@@ -31,31 +37,53 @@ public class Goopy : MonoBehaviour
 	{
 		yield return new WaitForSeconds(eat.length);
 		anim.SetBool("Eating", false);
+		isEat = false;
+		moveTimer = delayToMove;
 	}
 
-	private void SetDestination()
-    {
-		Vector3 direction = ((Vector3)Random.insideUnitCircle - transform.position).normalized;
-		if (direction.x == 0)
-        {
-			direction.x = direction.y;
-			direction.y = 0;
-        }
-		startPosition = transform.position;
-		nextMovePosition = transform.position + direction;
-		moveTimer = 0;
-	}
-
-	private void HandleMovement()
+	public void HandleMovement(Vector2 velocity)
 	{
-        moveTimer += Time.deltaTime / (1f / moveSpeed);
-        transform.position = Vector3.Lerp(startPosition, nextMovePosition, moveTimer);
-
-        if (moveTimer > delayToMove + moveSpeed)
+		if (isEat) return;
+		moveTimer -= Time.deltaTime;
+		if (moveTimer <= 0)	// Able to move
         {
-            SetDestination();
-        }
-    }
+			anim.SetBool("Moving", velocity.magnitude > 0.1f);
+
+			transform.up = velocity;
+			
+			transform.position += (Vector3)velocity * Time.deltaTime;
+			anim.transform.rotation = Quaternion.Euler(0, 0, transform.rotation.z);
+			if (velocity.x > 0.2f || velocity.x < -0.2f)
+			{
+				anim.transform.localScale = new Vector3(Mathf.Sign(velocity.x), 1, 1);
+			}
+			Debug.DrawRay(transform.position, transform.up, Color.red);
+
+		}
+		else
+        {
+			anim.SetBool("Moving", false);
+		}
+
+
+		if (moveTimer < -movePauseTime)
+        {
+			// Set delay to move
+			moveTimer = delayToMove;
+			// Choose another random pause timer
+			movePauseTime = Random.Range(2f, 5f);
+			// Choose another wander destination
+			SetWanderDestination();
+		}
+	}
+
+	private void SetWanderDestination()
+    {
+		float screenX = Random.Range(50f, Camera.main.pixelWidth - 50f);
+		float screenY = Random.Range(50f, Camera.main.pixelHeight - 50f);
+		Vector3 point = Camera.main.ScreenToWorldPoint(new Vector3(screenX, screenY, 0));
+		wanderDirection = (point-transform.position).normalized;
+	}
 
 	private void HandleAge()
 	{
@@ -108,13 +136,15 @@ public class Goopy : MonoBehaviour
 	private void Start()
 	{
 		Age = 0;
-		startPosition = transform.position;
+		agentCollider = GetComponent<Collider2D>();
+		isEat = false;
+		movePauseTime = Random.Range(2f, 5f);
+		SetWanderDestination();
 	}
 
 	// Update is called once per frame
 	private void Update()
 	{
-		//HandleMovement();
 		HandleAge();
 		HandleAnimation();
 	}

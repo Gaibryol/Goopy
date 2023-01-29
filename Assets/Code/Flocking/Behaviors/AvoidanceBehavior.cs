@@ -5,7 +5,8 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Flock/Behavior/Avoidance")]
 public class AvoidanceBehavior : FilteredFlockBehavior
 {
-    public override Vector2 CalculateMove(FlockAgent agent, List<Transform> context, Flock flock)
+    // From an objects nearest neighbours, calculate the avoidance vector
+    public override Vector2 CalculateMove(Goopy agent, List<Transform> context, PlayerManager flock)
     {
         //if no neighbors, return no adjustment
         if (context.Count == 0)

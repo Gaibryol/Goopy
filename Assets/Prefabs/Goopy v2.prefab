@@ -117,7 +117,6 @@ GameObject:
   - component: {fileID: 8475526455994364732}
   - component: {fileID: 155771283408244716}
   - component: {fileID: 155771283408244719}
-  - component: {fileID: 8915991393401157831}
   m_Layer: 0
   m_Name: Goopy v2
   m_TagString: Untagged
@@ -132,7 +131,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8475526455994364723}
-  m_LocalRotation: {x: 0, y: 0, z: -0.0031415469, w: 0.99999505}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.2, y: 0.2, z: 1}
   m_ConstrainProportionsScale: 0
@@ -140,7 +139,7 @@ Transform:
   - {fileID: 155771282703001410}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -0.36}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8475526455994364732
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -155,11 +154,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   GoopyPrefab: {fileID: 8475526455994364723}
   anim: {fileID: 5862028047165742682}
+  eat: {fileID: 7400000, guid: 24c65426ffc7a96449bbd50070f928d8, type: 2}
   maxAge: 24
   numSpawn: 3
-  moveSpeed: 1
   delayToMove: 2
   Age: 0
+  isEat: 0
 --- !u!58 &155771283408244716
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -197,15 +197,3 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!114 &8915991393401157831
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8475526455994364723}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 452ced670082ab74a89c766ff2bc1e66, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
