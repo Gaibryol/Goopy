@@ -9,7 +9,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7117383597c02934c8273c3e37913100, type: 3}
-  m_Name: Basic Cursor Upgrade
+  m_Script: {fileID: 11500000, guid: d04626a320ab2904ebefd95f42e56de2, type: 3}
+  m_Name: PlayerData
   m_EditorClassIdentifier: 
-  increaseFactor: 5
