@@ -32,6 +32,8 @@ public class Goopy : MonoBehaviour
 
 		isEat = true;
 		StartCoroutine(EatCoroutine());
+		PlayerManager.Instance.Save();
+
 	}
 
 	private IEnumerator EatCoroutine()
@@ -104,6 +106,7 @@ public class Goopy : MonoBehaviour
 			// Kill old goopy
 			PlayerManager.Instance.RemoveGoopy(this.gameObject.GetComponent<Goopy>());
 			Destroy(this.gameObject);
+			PlayerManager.Instance.Save();
 		}
 	}
 

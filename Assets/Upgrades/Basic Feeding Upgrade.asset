@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f836de60424467f4ea4ec73d582dbba0, type: 3}
   m_Name: Basic Feeding Upgrade
   m_EditorClassIdentifier: 
-  interval: 0
-  feedingCount: 0
-  feedingAmount: 0
+  interval: 5
+  feedingCount: 5
+  feedingAmount: 5

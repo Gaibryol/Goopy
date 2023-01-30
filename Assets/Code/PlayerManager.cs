@@ -10,12 +10,11 @@ public class PlayerManager : MonoBehaviour
 	private int numGoopies;
 
 	public FlockBehavior behavior;
-	public Upgrade[] upgrades;
+	public List<Upgrade> upgrades;
 
-	[Range(10, 500)]
-	public int startingCount = 250;
-	const float AgentDensity = 0.08f;
+	[SerializeField] private PlayerData playerData;
 
+	[Header("Flocking variables")]
 	[Range(1f, 100f)]
 	public float driveFactor = 10f;
 	[Range(1f, 100f)]
@@ -29,6 +28,8 @@ public class PlayerManager : MonoBehaviour
 	float squareNeighbourRadius;
 	float squareAvoidanceRadius;
 	public float SquareAvoidanceRadius { get { return squareAvoidanceRadius; } }
+
+	[SerializeField] private GameObject[] GoopyPrefabs;
 
 	// Start is called before the first frame update
 	void Start()
@@ -48,7 +49,7 @@ public class PlayerManager : MonoBehaviour
 		squareMaxSpeed = maxSpeed * maxSpeed;
 		squareNeighbourRadius = neighbourRadius * neighbourRadius;
 		squareAvoidanceRadius = squareNeighbourRadius * avoidanceRadiusMultiplier * avoidanceRadiusMultiplier;
-		InitUpgrades();
+		Load();
 	}
 
     private void Update()
@@ -121,5 +122,65 @@ public class PlayerManager : MonoBehaviour
         {
 			StartCoroutine(upgrade.Apply());
         }
+    }
+
+	public void Save()
+    {
+		if (playerData == null)
+        {
+			playerData = new PlayerData();
+        }
+		List<SavedGoopy> savedGoopies = new List<SavedGoopy>();
+		List<SavedUpgrade> savedUpgrades = new List<SavedUpgrade>();
+		foreach (Goopy goopy in Goopies)
+        {
+			savedGoopies.Add(new SavedGoopy(goopy.Age, "base"));
+        }
+
+		foreach (Upgrade upgrade in upgrades)
+        {
+			savedUpgrades.Add(new SavedUpgrade(upgrade));
+        }
+
+		playerData.Save(savedGoopies, savedUpgrades);
+    }
+
+	private void Load()
+    {
+		if (playerData == null)
+        {
+			// Load default
+			return;
+        }
+		Goopies.Clear();
+		upgrades.Clear();
+		foreach (SavedGoopy savedGoopy in playerData.SavedGoopies)
+        {
+			Vector3 randPos = new Vector3(Random.Range(-0.01f, 0.01f), Random.Range(-0.01f, 0.01f), 0);
+			Vector3 spawnPos = transform.position + randPos;
+
+			// Spawn goopy
+			GameObject spawnedGoopy = Instantiate(GetGoopyPrefab(savedGoopy.Type), spawnPos, Quaternion.identity);
+			Goopy goopy = spawnedGoopy.GetComponent<Goopy>();
+			goopy.Age = savedGoopy.Age;
+			AddGoopy(goopy);
+		}
+
+		foreach (SavedUpgrade savedUpgrade in playerData.SavedUpgrades)
+        {
+			upgrades.Add(savedUpgrade.Upgrade);
+        }
+
+		InitUpgrades();
+    }
+
+	private GameObject GetGoopyPrefab(string type)
+    {
+		// add more when we have differnet tyhpe of goopioes
+		if (type == "base")
+        {
+			return GoopyPrefabs[0];
+        }
+		return null;
     }
 }
